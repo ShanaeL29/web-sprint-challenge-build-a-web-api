@@ -1,4 +1,5 @@
 // add middlewares here related to actions
+const { restart } = require("nodemon");
 const { get } = require("./actions-model");
 
 const checkActionId = (req, res, next) => {
@@ -17,6 +18,22 @@ const checkActionId = (req, res, next) => {
     .catch(next);
 };
 
+const checkUpdatePayload = (req, res, next) => {
+  if (
+    !req.body.project_id ||
+    !req.body.description.trim() ||
+    !req.body.notes.trim() ||
+    !req.body.completed
+  ) {
+    res.status(400).json({
+      message: "project_id, description, notes, and completed are required",
+    });
+  } else {
+    next();
+  }
+};
+
 module.exports = {
   checkActionId,
+  checkUpdatePayload,
 };
