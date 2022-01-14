@@ -31,6 +31,8 @@ router.post("/", checkProjectPayload, (req, res, next) => {
     .catch(next);
 });
 
+router.put("/:id", (req, res, next) => {});
+
 router.delete("/:id", checkProjectId, (req, res, next) => {
   Project.remove(req.params.id).then().res.status(200).catch(next);
 });
