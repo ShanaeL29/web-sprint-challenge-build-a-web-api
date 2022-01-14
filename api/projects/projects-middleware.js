@@ -17,6 +17,18 @@ const checkProjectId = (req, res, next) => {
     .catch(next);
 };
 
+const checkProjectPayload = (req, res, next) => {
+  if (req.body.name && req.body.description) {
+    next();
+  } else {
+    next({
+      status: 400,
+      message: "name and description are required",
+    });
+  }
+};
+
 module.exports = {
   checkProjectId,
+  checkProjectPayload,
 };

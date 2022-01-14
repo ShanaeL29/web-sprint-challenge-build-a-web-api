@@ -1,7 +1,10 @@
 // Write your "projects" router here!
 const router = require("express").Router();
 
-const { checkProjectId } = require("./projects-middleware");
+const {
+  checkProjectId,
+  checkProjectPayload,
+} = require("./projects-middleware");
 const Project = require("./projects-model");
 
 router.get("/", (req, res, next) => {
@@ -18,6 +21,14 @@ router.get("/", (req, res, next) => {
 
 router.get("/:id", checkProjectId, (req, res, next) => {
   res.json(req.project);
+});
+
+router.post("/", checkProjectPayload, (req, res, next) => {
+  Project.insert(req.body)
+    .then((project) => {
+      res.status(201).json(project);
+    })
+    .catch(next);
 });
 
 router.use((err, req, res, next) => {
