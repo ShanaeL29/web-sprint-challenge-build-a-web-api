@@ -37,15 +37,21 @@ router.put(
   checkProjectId,
   checkProjectPayload,
   checkPutPayload,
-  (req, res, next) => {
-    const { name, description, completed } = req.body;
+  async (req, res, next) => {
+    // const { name, description, completed } = req.body;
+    const changes = req.body;
+    // console.log(changes);
 
-    Project.update(req.params.id, { name, description, completed })
-      .then((project) => {
-        res.status(200).json(project);
-        // console.log(project);
-      })
-      .catch(next);
+    // Project.update(req.params.id, { name, description, completed })
+    try {
+      const updated = await Project.update(req.params.id, changes);
+      // console.log(req.project);
+      res.status(200).json(updated);
+
+      // console.log(project);
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
