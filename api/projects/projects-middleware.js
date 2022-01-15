@@ -28,7 +28,19 @@ const checkProjectPayload = (req, res, next) => {
   }
 };
 
+const checkPutPayload = (req, res, next) => {
+  if (req.body.completed) {
+    next();
+  } else {
+    next({
+      status: 400,
+      message: "name, description and completed are required",
+    });
+  }
+};
+
 module.exports = {
   checkProjectId,
   checkProjectPayload,
+  checkPutPayload,
 };

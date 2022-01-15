@@ -1,7 +1,11 @@
 // Write your "actions" router here!
 const router = require("express").Router();
 
-const { checkActionId, checkUpdatePayload } = require("./actions-middlware");
+const {
+  checkActionId,
+  checkPutPayload,
+  checkPostPayload,
+} = require("./actions-middlware");
 
 const Action = require("./actions-model");
 
@@ -21,7 +25,15 @@ router.get("/:id", checkActionId, (req, res, next) => {
   res.json(req.action);
 });
 
-router.put("/:id", checkActionId, checkUpdatePayload, (req, res, next) => {
+router.post("/", checkPostPayload, (req, res, next) => {
+  Action.insert(req.body)
+    .then((action) => {
+      res.status(201).json(action);
+    })
+    .catch(next);
+});
+
+router.put("/:id", checkActionId, checkPutPayload, (req, res, next) => {
   Action.update(req.params.id, req.body)
     .then((action) => {
       res.status(200).json(action);

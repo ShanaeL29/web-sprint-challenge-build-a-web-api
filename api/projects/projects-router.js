@@ -4,6 +4,7 @@ const router = require("express").Router();
 const {
   checkProjectId,
   checkProjectPayload,
+  checkPutPayload,
 } = require("./projects-middleware");
 const Project = require("./projects-model");
 
@@ -31,7 +32,22 @@ router.post("/", checkProjectPayload, (req, res, next) => {
     .catch(next);
 });
 
-router.put("/:id", (req, res, next) => {});
+router.put(
+  "/:id",
+  checkProjectId,
+  checkProjectPayload,
+  checkPutPayload,
+  (req, res, next) => {
+    const { name, description, completed } = req.body;
+
+    Project.update(req.params.id, { name, description, completed })
+      .then((project) => {
+        res.status(200).json(project);
+        // console.log(project);
+      })
+      .catch(next);
+  }
+);
 
 router.delete("/:id", checkProjectId, (req, res, next) => {
   Project.remove(req.params.id).then().res.status(200).catch(next);
